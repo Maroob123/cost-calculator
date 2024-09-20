@@ -58,8 +58,20 @@ const [newField, setNewField] = useState({
 
   const handleAddField = () => {
     props.setData((prevData) => {
-        return { ...prevData, days: [...prevData.days, newField] };
-      });    setNewField({
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = [...updatedTabs[props.currentTabIndex].days, newField];
+  
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: updatedDays,
+      };
+  
+      return {
+        ...prevData,
+        tabs: updatedTabs,
+      };
+    });
+    setNewField({
         date:"",
         task:"",
         totalVehicle: 0,
@@ -115,15 +127,43 @@ const [newField, setNewField] = useState({
   };
 
   const handleDateChange = (e, index) => {
-    const newData = [...daysData];
-    newData[index].date = e.target.value;
-    props.setData({ ...props.data, days: newData });
+    const newDate = e.target.value;
+    props.setData((prevData) => {
+        const updatedTabs = [...prevData.tabs];
+        const updatedDays = [...updatedTabs[props.currentTabIndex].days];
+
+        updatedDays[index] = { ...updatedDays[index], date: newDate };
+
+        updatedTabs[props.currentTabIndex] = {
+            ...updatedTabs[props.currentTabIndex],
+            days: updatedDays,
+        };
+
+        return {
+            ...prevData,
+            tabs: updatedTabs,
+        };
+    });
   };
 
   const handleTaskChange = (e, index) => {
-    const newData = [...daysData];
-    newData[index].task = e.target.value;
-    props.setData({ ...props.data, days: newData });
+    const newTask = e.target.value;
+    props.setData((prevData) => {
+        const updatedTabs = [...prevData.tabs];
+        const updatedDays = [...updatedTabs[props.currentTabIndex].days];
+
+        updatedDays[index] = { ...updatedDays[index], task: newTask };
+
+        updatedTabs[props.currentTabIndex] = {
+            ...updatedTabs[props.currentTabIndex],
+            days: updatedDays,
+        };
+
+        return {
+            ...prevData,
+            tabs: updatedTabs,
+        };
+    });
   };
 
   const handleRemoveField = (e, indexToRemove) => {
@@ -145,8 +185,14 @@ const [newField, setNewField] = useState({
 
     props.setCurrentDataIndex(indexToRemove - 1)
     props.setData((prevData) => {
-      const updatedDays = prevData.days.filter((day, index) => index !== indexToRemove);
-      return { ...prevData, days: updatedDays, costCalculation: overallcost };
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = updatedTabs[props.currentTabIndex].days.filter((day, index) => index !== indexToRemove);
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: updatedDays,
+        costCalculation: overallcost
+      };
+      return { ...prevData, tabs: updatedTabs };
     });
   };
 

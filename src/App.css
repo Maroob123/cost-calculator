@@ -1,5 +1,6 @@
 :root {
   --color-primary-custome: rgb(0,78,155);
+  --bs-primary-rgb: 0,78,155 !important;
 }
 input[type=checkbox]
 {
@@ -33,4 +34,12 @@ input[type=checkbox]
 .btn.btn-outline-custom:hover {
   background-color: var(--color-primary-custome);
   color: #fff;
+}
+.btn-primary {
+  --bs-btn-bg: var(--color-primary-custome) !important;
+  --bs-btn-border-color: var(--color-primary-custome) !important;
+  --bs-btn-hover-bg: var(--color-primary-custome) !important;
+}
+.border-primary {
+
 }

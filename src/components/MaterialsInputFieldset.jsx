@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AiOutlineClose } from "react-icons/ai";
 
 
 export default function MaterialsInputFieldset(props) {
-  const [newField, setNewField] = useState({ material: "", materialValue: "0", hours: 0, cost: 0 });
+  const newField = { material: "", materialValue: "0", hours: 0, cost: 0 };
   const MaterialData = props.data && Array.isArray(props?.data.days[props.currentDataIndex]?.material) ? props?.data.days[props.currentDataIndex]?.material : [];
   const handleAddField = () => {
     props.setData((prevData) => {
-      const updatedDays = prevData.days.map((day, index) => {
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = updatedTabs[props.currentTabIndex].days.map((day, index) => {
         if (index === props.currentDataIndex) {
           return { ...day, material: [...day.material, newField] };
         }
         return day;
       });
   
-      return { ...prevData, days: updatedDays };
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: updatedDays,
+      };
+
+      return { ...prevData, tabs: updatedTabs };
     });
   
-    setNewField({ material: "", materialValue: "0", hours: 0, cost: 0 });
   };
 
     // Function to calculate the sum of material costs for a given day
@@ -42,7 +47,20 @@ const calculateTotalCost = (days) => {
     let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
     overallcost.TotalCost = totatcostcalculation;
     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-    props.setData({ ...props.data, days: newData, costCalculation : overallcost });
+    props.setData((prevData)=>{
+      const updatedTabs = [...prevData.tabs];
+
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: newData,
+        costCalculation : overallcost
+      };
+
+      return {
+        ...prevData,
+        tabs: updatedTabs,
+      };
+    });
   };
 
   const handleHoursChange = (e, index) => {
@@ -56,12 +74,26 @@ const calculateTotalCost = (days) => {
     let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
     overallcost.TotalCost = totatcostcalculation;
     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-    props.setData({ ...props.data, days: newData, costCalculation : overallcost });
+    props.setData((prevData)=>{
+      const updatedTabs = [...prevData.tabs];
+
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: newData,
+        costCalculation : overallcost
+      };
+
+      return {
+        ...prevData,
+        tabs: updatedTabs,
+      };
+    });
   };
 
   const handleRemoveField = (indexToRemove) => {
     props.setData((prevData) => {
-      const updatedDays = prevData.days.map((day, index) => {
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = updatedTabs[props.currentTabIndex].days.map((day, index) => {
         if (index === props.currentDataIndex) {
           return { ...day, material: day.material.filter((material, index) => index !== indexToRemove) };
         }
@@ -76,7 +108,13 @@ const calculateTotalCost = (days) => {
       overallcost.TotalCost = totatcostcalculation;
       overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
 
-      return { ...prevData, days: updatedDays, costCalculation : overallcost };
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: updatedDays,
+        costCalculation : overallcost
+      };
+
+      return { ...prevData, tabs: updatedTabs };
     });
   };
 
@@ -106,7 +144,7 @@ const calculateTotalCost = (days) => {
         <div className="col-3 mb-5 ps-2 pe-0">
           <p className='w-100 text-start mb-1'>Cost</p>
           {MaterialData.map((item, index) => (
-          <input type="text" key={index} value={item?.cost} className="form-control mb-3 bg-success bg-opacity-10" />
+          <input type="text" key={index} readOnly value={item?.cost} className="form-control mb-3 bg-success bg-opacity-10" />
           ))}
         </div>
         <div className="col-1 p-0">

@@ -3,6 +3,8 @@ import axios from 'axios';
 import Swal from "sweetalert2";
 export default function CostCalculationFieldset(props) {
 const [loader, setLoader] = useState(false);
+
+console.log("hhhhhhhhhhhhh", props.allData);
 async function submitForm(){
 
 setLoader(true);
@@ -19,7 +21,7 @@ setLoader(true);
     
       return;
     }
-    const response = await axios.post('https://apps.leadsmovinghomecompany.com/costingapp/insertFormData', { DealId: dealId, formData: props.data });
+    const response = await axios.post('https://apps.leadsmovinghomecompany.com/costingapp/insertFormData', { DealId: dealId, formData: props.allData });
     if(response.data){
       
       Swal.fire({
@@ -46,7 +48,23 @@ function handlechangeMarkup(e){
   let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
   overallcost.TotalCost = totatcostcalculation;
   overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-  props.setData({ ...props.data, costCalculation: overallcost   });
+
+  props.setData((prevData)=>{
+    const updatedTabs = [...prevData.tabs];
+    const updatedDays = [...updatedTabs[props.currentTabIndex].days];
+
+
+    updatedTabs[props.currentTabIndex] = {
+      ...updatedTabs[props.currentTabIndex],
+      days: updatedDays,
+      costCalculation : overallcost
+    };
+
+    return {
+      ...prevData,
+      tabs: updatedTabs,
+    };
+  });
 }
   return (
     <fieldset className='row p-2 border border-1 rounded'>

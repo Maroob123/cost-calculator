@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AiOutlineClose } from "react-icons/ai";
 
 
 export default function HumanResourcesInputFieldset(props) {
-  const [newField, setNewField] = useState({ resource_name: "", resource_Value: "0", days: "",overnight: false, hours: 8, cost: 0 });
+  const newField = { resource_name: "", resource_Value: "0", days: "",overnight: false, hours: 8, cost: 0 };
   const humanResourcesData = props.data && Array.isArray(props?.data.days[props.currentDataIndex]?.resources) ? props?.data.days[props.currentDataIndex]?.resources : [];
 
   const handleAddField = () => {
     props.setData((prevData) => {
-      const updatedDays = prevData.days.map((day, index) => {
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = updatedTabs[props.currentTabIndex].days.map((day, index) => {
         if (index === props.currentDataIndex) {
           return { ...day, resources: [...day.resources, newField] };
         }
         return day;
       });
+
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: updatedDays,
+      };
   
-      return { ...prevData, days: updatedDays };
+      return { ...prevData, tabs: updatedTabs };
     });
   
-    setNewField({ resource_name: "", resource_Value: "0", days: "",overnight: false, hours: 8, cost: 0 });
   };
 
     // Function to calculate the sum of material costs for a given day
@@ -53,7 +58,21 @@ const calculateTotalHuman = (day) => {
     let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
     overallcost.TotalCost = totatcostcalculation;
     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-    props.setData({ ...props.data, days: newData, costCalculation : overallcost  });
+
+    props.setData((prevData)=>{
+      const updatedTabs = [...prevData.tabs];
+
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: newData,
+        costCalculation : overallcost
+      };
+
+      return {
+        ...prevData,
+        tabs: updatedTabs,
+      };
+    });
 
   };
 
@@ -98,7 +117,20 @@ const calculateTotalHuman = (day) => {
     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
     }
     
-    props.setData({ ...props.data, days: newData, costCalculation : overallcost });
+    props.setData((prevData)=>{
+      const updatedTabs = [...prevData.tabs];
+
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: newData,
+        costCalculation : overallcost
+      };
+
+      return {
+        ...prevData,
+        tabs: updatedTabs,
+      };
+    });
   };  
 
   const handleHoursChange = (e, index) => {
@@ -126,12 +158,26 @@ const calculateTotalHuman = (day) => {
     let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
     overallcost.TotalCost = totatcostcalculation;
     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-    props.setData({ ...props.data, days: newData, costCalculation : overallcost });
+    props.setData((prevData)=>{
+      const updatedTabs = [...prevData.tabs];
+
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: newData,
+        costCalculation : overallcost
+      };
+
+      return {
+        ...prevData,
+        tabs: updatedTabs,
+      };
+    });
   };
 
   const handleRemoveField = (indexToRemove) => {
     props.setData((prevData) => {
-      const updatedDays = prevData.days.map((day, index) => {
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = updatedTabs[props.currentTabIndex].days.map((day, index) => {
         if (index === props.currentDataIndex) {
           return { ...day, resources: day.resources.filter((resource, index) => index !== indexToRemove) };
         }
@@ -147,7 +193,13 @@ const calculateTotalHuman = (day) => {
     overallcost.TotalCost = totatcostcalculation;
     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
 
-      return { ...prevData, days: updatedDays, costCalculation : overallcost };
+    updatedTabs[props.currentTabIndex] = {
+      ...updatedTabs[props.currentTabIndex],
+      days: updatedDays,
+      costCalculation : overallcost
+    };
+
+    return { ...prevData, tabs: updatedTabs };
     });
   };
 
@@ -155,7 +207,7 @@ const calculateTotalHuman = (day) => {
     <fieldset className='row mx-lg-1 mb-3 p-2 border border-1 rounded'>
       <div className="col-4 mb-5 px-0">
         <p className='w-100 text-start mb-1'>Human resources</p>
-        {humanResourcesData.map((item, index) => (<select className="form-select mb-3" key={index} value={item.resource_Value} onChange={(e) => handleresourceChange(e, index)} aria-label="Select Vehicle">
+        {humanResourcesData.map((item, index) => (<select className="form-select mb-3" key={index} value={item.resource_Value} onChange={(e) => handleresourceChange(e, index)} aria-label="Select Human resources">
           <option disabled value="0" className='d-none'></option>
           {props.resourceData.resourceOptions.map((option, idx) => (
             <option key={idx} value={option.value}>{option.name}</option>
@@ -182,7 +234,7 @@ const calculateTotalHuman = (day) => {
       <div className="col-3 mb-5 ps-2 pe-0">
         <p className='w-100 text-start mb-1'>Cost</p>
         {humanResourcesData.map((item, index) => (
-          <input type="text" key={index} value={item?.cost} className="form-control mb-3 bg-success bg-opacity-10" />
+          <input type="text" key={index} readOnly value={item?.cost} className="form-control mb-3 bg-success bg-opacity-10" />
         ))}
       </div>
       <div className="col-1 p-0">

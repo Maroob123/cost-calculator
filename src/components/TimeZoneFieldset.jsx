@@ -17,8 +17,19 @@ export default function TimeZoneFieldset(props) {
          let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
         overallcost.TotalCost = totatcostcalculation;
         overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-         props.setData({ ...props.data, ZonePrice: cost, costCalculation: overallcost });
-      };
+        props.setData((prevData)=>{
+            const updatedTabs = [...prevData.tabs];
+            const updatedDays = [...updatedTabs[props.currentTabIndex].days];
+
+            updatedTabs[props.currentTabIndex] = {
+                ...updatedTabs[props.currentTabIndex],
+                days: updatedDays,
+                ZonePrice: cost,
+                costCalculation: overallcost 
+            };
+            return { ...prevData, tabs: updatedTabs };
+        });
+    };
 
       const handleChangeCost = (e) => {
         //const newData = [...props.data.days];
@@ -35,8 +46,19 @@ export default function TimeZoneFieldset(props) {
          let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
         overallcost.TotalCost = totatcostcalculation;
         overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-         props.setData({ ...props.data, ZonePrice: cost, costCalculation: overallcost });
-      };
+        props.setData((prevData)=>{
+            const updatedTabs = [...prevData.tabs];
+            const updatedDays = [...updatedTabs[props.currentTabIndex].days];
+
+            updatedTabs[props.currentTabIndex] = {
+                ...updatedTabs[props.currentTabIndex],
+                days: updatedDays,
+                ZonePrice: cost,
+                costCalculation: overallcost 
+            };
+            return { ...prevData, tabs: updatedTabs };
+        });
+    };
 
     return (
         <fieldset className='row mt-5 mb-3 p-2 border border-1 rounded'>

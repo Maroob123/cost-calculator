@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AiOutlineClose } from "react-icons/ai";
 
 
 export default function VehicleInputFieldset(props) {
-  const [newField, setNewField] = useState({ driver_name: "", driver_value: "0", miles: 0, days: 0, fuelcost: 0, cost: 0 });
+  const newField = { driver_name: "", driver_value: "0", miles: 0, days: 0, fuelcost: 0, cost: 0 };
   const vehiclesData = props.data && Array.isArray(props?.data.days[props.currentDataIndex]?.drivers) ? props?.data.days[props.currentDataIndex]?.drivers : [];
 
   const handleAddField = () => {
     props.setData((prevData) => {
-      const updatedDays = prevData.days.map((day, index) => {
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = updatedTabs[props.currentTabIndex].days.map((day, index) => {
         if (index === props.currentDataIndex) {
           return { ...day, drivers: [...day.drivers, newField] };
         }
         return day;
       });
+
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: updatedDays,
+      };
   
-      return { ...prevData, days: updatedDays };
+      return { ...prevData, tabs: updatedTabs };
     });
   
-    setNewField({ driver_name: "", driver_value: "0", miles: 0, days: 0, fuelcost: 0, cost: 0 });
   };
 
   // Function to calculate the sum of material costs for a given day
@@ -56,7 +61,20 @@ const calculateTotalfuelCost = (days) => {
     let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
     overallcost.TotalCost = totatcostcalculation;
     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-    props.setData({ ...props.data, days: newData, costCalculation: overallcost });
+    props.setData((prevData)=>{
+      const updatedTabs = [...prevData.tabs];
+
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: newData,
+        costCalculation : overallcost
+      };
+      
+      return {
+        ...prevData,
+        tabs: updatedTabs,
+      };
+    });
   };
 
   const handleMilesChange = (e, index) => {
@@ -70,7 +88,20 @@ const calculateTotalfuelCost = (days) => {
     let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
     overallcost.TotalCost = totatcostcalculation;
     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-    props.setData({ ...props.data, days: newData, costCalculation: overallcost });
+    props.setData((prevData)=>{
+      const updatedTabs = [...prevData.tabs];
+
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: newData,
+        costCalculation : overallcost
+      };
+      
+      return {
+        ...prevData,
+        tabs: updatedTabs,
+      };
+    });
   };
 
   const handledaysChange = (e, index) => {
@@ -88,12 +119,26 @@ const calculateTotalfuelCost = (days) => {
     let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
     overallcost.TotalCost = totatcostcalculation;
     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-    props.setData({ ...props.data, days: newData, costCalculation : overallcost  });
+    props.setData((prevData)=>{
+      const updatedTabs = [...prevData.tabs];
+
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: newData,
+        costCalculation : overallcost
+      };
+
+      return {
+        ...prevData,
+        tabs: updatedTabs,
+      };
+    });
   };
 
   const handleRemoveField = (indexToRemove) => {
     props.setData((prevData) => {
-      const updatedDays = prevData.days.map((day, index) => {
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = updatedTabs[props.currentTabIndex].days.map((day, index) => {
         if (index === props.currentDataIndex) {
           return { ...day, drivers: day.drivers.filter((driver, index) => index !== indexToRemove) };
         }
@@ -112,8 +157,13 @@ const calculateTotalfuelCost = (days) => {
     overallcost.TotalCost = totatcostcalculation;
     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
 
+    updatedTabs[props.currentTabIndex] = {
+      ...updatedTabs[props.currentTabIndex],
+      days: updatedDays,
+      costCalculation : overallcost
+    };
 
-      return { ...prevData, days: updatedDays, costCalculation : overallcost };
+    return { ...prevData, tabs: updatedTabs };
     });
   };
 
@@ -124,7 +174,7 @@ const calculateTotalfuelCost = (days) => {
         <p className='w-100 text-start mb-1'>Vehicles</p>
         {vehiclesData.map((item, index) => (
         <select className="form-select mb-3" key={index} value={item?.driver_value} aria-label="Select Vehicle" onChange={(e) => handleVehicleChange(e, index)}>
-          <option disabled selected value="0" className='d-none'></option>
+          <option disabled value="0" className='d-none'></option>
           {props.vehicleData.vehicleOptions.map((option, idx) => (
             <option key={idx} value={option.value}>{option.name}</option>
           ))}

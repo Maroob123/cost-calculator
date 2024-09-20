@@ -1,19 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AiOutlineClose } from "react-icons/ai";
 
 export default function CostTypeInputFieldset(props) {
 
-    const [newField, setNewField] = useState({
-        otherService:"",
-        otherserviceValue: "",
-        currency:"",
-        currencyNotes:"",
-        margin:0,
-        cost:0,
-        withmarginCost: 0
-     });
+  const newField = { otherService:"", otherserviceValue: "", currency:"", currencyNotes:"", margin:0, cost:0, withmarginCost: 0};
 
-     console.log(props)
   const OtherData = props.data && Array.isArray(props?.data.days[props.currentDataIndex]?.others) ? props?.data.days[props.currentDataIndex]?.others : [];
 
 
@@ -26,25 +17,22 @@ export default function CostTypeInputFieldset(props) {
 
   const handleAddField = () => {
     props.setData((prevData) => {
-      const updatedDays = prevData.days.map((day, index) => {
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = updatedTabs[props.currentTabIndex].days.map((day, index) => {
         if (index === props.currentDataIndex) {
           return { ...day, others: [...day.others, newField] };
         }
         return day;
       });
   
-      return { ...prevData, days: updatedDays };
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: updatedDays,
+      };
+
+      return { ...prevData, tabs: updatedTabs };
     });
   
-    setNewField({
-        otherService:"",
-        otherserviceValue: "",
-        currency:"",
-        currencyNotes:"",
-        margin:0,
-        cost:0,
-        withmarginCost: 0
-     });
   };
 
   // const handleOtherserviceChange = (e, index) => {
@@ -76,7 +64,22 @@ export default function CostTypeInputFieldset(props) {
     let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
     overallcost.TotalCost = totatcostcalculation;
     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-    props.setData({ ...props.data, days: newData, costCalculation: overallcost   });
+    props.setData((prevData)=>{
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = [...updatedTabs[props.currentTabIndex].days];
+  
+  
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: updatedDays,
+        costCalculation : overallcost
+      };
+  
+      return {
+        ...prevData,
+        tabs: updatedTabs,
+      };
+    });
 
     }
 
@@ -84,15 +87,45 @@ export default function CostTypeInputFieldset(props) {
   
 
   const handleChangeCurrency = (e, index) => {
-    const newData = [...props.data.days];
-    newData[props.currentDataIndex].others[index].currency = e.target.value
-    props.setData({ ...props.data, days: newData });
+    const newData = e.target.value;
+
+    props.setData((prevData) => {
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = [...updatedTabs[props.currentTabIndex].days];
+
+      updatedDays[props.currentDataIndex].others[index].currency = newData;
+
+      updatedTabs[props.currentTabIndex] = {
+          ...updatedTabs[props.currentTabIndex],
+          days: updatedDays,
+      };
+
+      return {
+          ...prevData,
+          tabs: updatedTabs,
+      };
+    });
   };
 
   const handleChangeCurrencyNotes = (e, index) => {
-    const newData = [...props.data.days];
-     newData[props.currentDataIndex].others[index].currencyNotes = e.target.value
-     props.setData({ ...props.data, days: newData });
+    const newData = e.target.value;
+
+    props.setData((prevData) => {
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = [...updatedTabs[props.currentTabIndex].days];
+
+      updatedDays[props.currentDataIndex].others[index].currencyNotes = newData;
+
+      updatedTabs[props.currentTabIndex] = {
+          ...updatedTabs[props.currentTabIndex],
+          days: updatedDays,
+      };
+
+      return {
+          ...prevData,
+          tabs: updatedTabs,
+      };
+    });
   };
 
   const handleChangeCost = (e, index) => {
@@ -110,7 +143,20 @@ export default function CostTypeInputFieldset(props) {
     let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
     overallcost.TotalCost = totatcostcalculation;
     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-    props.setData({ ...props.data, days: newData, costCalculation: overallcost   });
+    props.setData((prevData)=>{
+      const updatedTabs = [...prevData.tabs];
+
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: newData,
+        costCalculation : overallcost
+      };
+
+      return {
+        ...prevData,
+        tabs: updatedTabs,
+      };
+    });
   };
 
   const handleChangeMargin = (e, index) => {
@@ -131,12 +177,26 @@ export default function CostTypeInputFieldset(props) {
      let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
      overallcost.TotalCost = totatcostcalculation;
      overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
-     props.setData({ ...props.data, days: newData, costCalculation: overallcost   });
+     props.setData((prevData)=>{
+      const updatedTabs = [...prevData.tabs];
+
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: newData,
+        costCalculation : overallcost
+      };
+
+      return {
+        ...prevData,
+        tabs: updatedTabs,
+      };
+    });
   };
 
   const handleRemoveField = (indexToRemove) => {
     props.setData((prevData) => {
-      const updatedDays = prevData.days.map((day, index) => {
+      const updatedTabs = [...prevData.tabs];
+      const updatedDays = updatedTabs[props.currentTabIndex].days.map((day, index) => {
         if (index === props.currentDataIndex) {
           return { ...day, others: day.others.filter((other, index) => index !== indexToRemove) };
         }
@@ -152,7 +212,13 @@ export default function CostTypeInputFieldset(props) {
       overallcost.TotalCost = totatcostcalculation;
       overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
 
-      return { ...prevData, days: updatedDays, costCalculation: overallcost };
+      updatedTabs[props.currentTabIndex] = {
+        ...updatedTabs[props.currentTabIndex],
+        days: updatedDays,
+        costCalculation : overallcost
+      };
+
+      return { ...prevData, tabs: updatedTabs };
     });
   };
 
@@ -162,7 +228,7 @@ export default function CostTypeInputFieldset(props) {
                 <p className='w-100 text-start mb-1'>Cost Type</p>
                 {OtherData.map((item, index) => (
                 <select className="form-select mb-3" aria-label="Select Vehicle" key={index} value={item?.otherService} onChange={(e) => handleOtherserviceChange(e, index)}>
-                    <option disabled selected value="" className='d-none'></option>
+                    <option disabled value="" className='d-none'></option>
                     {props?.otherCostData?.otherCostsOptions.map((item, innerIndex)=> (
                       <option value={item.name} index={innerIndex}>{item.name}</option>
                     ))}
