@@ -3,7 +3,7 @@ import { AiOutlineClose } from "react-icons/ai";
 
 
 export default function VehicleInputFieldset(props) {
-  const newField = { driver_name: "", driver_value: "0", miles: 0, days: 0, fuelcost: 0, cost: 0 };
+  const newField = { driver_name: "", driver_value: "0", miles: 0, days: 1, fuelcost: 0, cost: 0 };
   const vehiclesData = props.data && Array.isArray(props?.data.days[props.currentDataIndex]?.drivers) ? props?.data.days[props.currentDataIndex]?.drivers : [];
 
   const handleAddField = () => {

@@ -4,7 +4,6 @@ import Swal from "sweetalert2";
 export default function CostCalculationFieldset(props) {
 const [loader, setLoader] = useState(false);
 
-console.log("hhhhhhhhhhhhh", props.allData);
 async function submitForm(){
 
 setLoader(true);
@@ -21,7 +20,7 @@ setLoader(true);
     
       return;
     }
-    const response = await axios.post('https://apps.leadsmovinghomecompany.com/costingapp/insertFormData', { DealId: dealId, formData: props.allData });
+    const response = await axios.post('https://apps.leadsmovinghomecompany.com/costingAppStaging/insertFormData', { DealId: dealId, tabs: props.allData.tabs });
     if(response.data){
       
       Swal.fire({
