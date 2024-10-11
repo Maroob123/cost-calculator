@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { DayTaskInputFieldset, VehicleInputFieldset, HumanResourcesInputFieldset, MaterialsInputFieldset, CostCalculationFieldset, CostTypeInputFieldset, TimeZoneFieldset } from "../components";
 import axios from 'axios';
+import Swal from "sweetalert2";
 
 export default function HomePage({ adminData }) {
+   const [loader, setLoader] = useState(false);
     const [data, setData] = useState({
       "tabs": [
         {
@@ -196,7 +198,70 @@ export default function HomePage({ adminData }) {
          }));
       };
 
+      const handleApiCall = async (url, successMessage) => {
+         setLoader(true);
+         try {
+             const params = new URLSearchParams(window.location.search);
+             const dealId = params.get('DealId');
+             if (!dealId) {
+                 setLoader(false);
+                 Swal.fire({
+                     title: 'error',
+                     text: "DealId not found",
+                     icon: "error",
+                 });
+                 return;
+             }
+             const response = await axios.post(url, { DealId: dealId, tabNumber: currentTabIndex, tabs: data.tabs });
+             if (response.data) {
+                 setData({"tabs": [...response.data.data]});
+                 Swal.fire({
+                     title: 'success',
+                     text: successMessage,
+                     icon: "success",
+                 });
+             }
+         } catch (error) {
+             setLoader(false);
+             console.error("Error details:", error.response ? error.response.data : error.message);
+             Swal.fire({
+                 title: 'error',
+                 text: "Something went wrong",
+                 icon: "error",
+             });
+         } finally {
+             setLoader(false);
+         }
+     };
+
+   async function createQuotation() {
+      await handleApiCall('https://apps.leadsmovinghomecompany.com/costingAppStaging/sendQuatation', "Successfully submitted your form");
+   }
+  
+   async function manuallyApprove() {
+      await handleApiCall('https://apps.leadsmovinghomecompany.com/costingAppStaging/forceApproveQuatation', "Successfully submitted your form");
+   }
+
     return (
+      <>
+         <nav class="navbar sticky-top navbar-light bg-light">
+            <div class="container">
+
+               <h1 class="navbar-brand ms-2 mb-0 p-0">Cost Calculations {data?.tabs[currentTabIndex]?.isQuatationStatus !== undefined && (<span class={ `badge ${data?.tabs[currentTabIndex]?.isQuatationStatus === true ? "bg-success" : "bg-warning  text-dark"}`}>{data?.tabs[currentTabIndex]?.isQuatationStatus ? "Approved" : "Not Signed"}</span>)}</h1>
+               <div>
+                  {data?.tabs[currentTabIndex]?.isQuatationStatus === false && (
+                     <button className="btn btn-outline-custom px-4 me-2" type="button" onClick={manuallyApprove} disabled={loader}>
+                        {loader ? <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span> : <span role="status">Manually Approve</span>}
+                     </button>
+                  )}
+                  {!data?.tabs[currentTabIndex]?.isQuatationStatus === true && (
+                     <button className="btn btn-primary px-4" type="button" onClick={createQuotation} disabled={loader}>
+                        {loader ? <span className="spinner-border spinner-border-sm me-2" aria-hidden="true"></span> : <span role="status">{data?.tabs[currentTabIndex]?.isQuatationStatus === false ? "Update Quotation" : "Generate Quotation"}</span>}
+                     </button>
+                  )}
+               </div>
+            </div>
+         </nav>
         <div className="container my-4">
          <nav className='row mb-4'>
             <div className="nav nav-pills" id="nav-tab" role="tablist">
@@ -230,5 +295,6 @@ export default function HomePage({ adminData }) {
                 </div>
             </div>
         </div>
+        </>
     )
 }
