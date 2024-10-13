@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "//": "http://apps.leadsmovinghomecompany.com/costing_admin_app",
-  "homepage": "http://apps.leadsmovinghomecompany.com/costing_schedular_app",
+  "homepage": "http://apps.leadsmovinghomecompany.com/costing_app_staging",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",

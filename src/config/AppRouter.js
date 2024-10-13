@@ -39,9 +39,10 @@ export default function AppRouter() {
     return (
         <Router>
             <Routes>
-                {isgetData && <Route path='/costing_app/' exact element={<HomePage adminData={adminData}/>}  />}
-                {isgetData && <Route path='/costing_admin_app/' exact element={<Admin adminData={adminData} setAdminData={setAdminData}/>}  />}
-                {isgetData &&<Route path='/costing_schedular_app/' exact element={<Schedular adminData={adminData} />}/> }
+            {isgetData && <Route path='/costing_app_staging/' exact element={<HomePage adminData={adminData}/>}  />}
+            {/* {isgetData && <Route path='/costing_app/' exact element={<HomePage adminData={adminData}/>}  />} */}
+            {isgetData && <Route path='/costing_admin_app/' exact element={<Admin adminData={adminData} setAdminData={setAdminData}/>}  />}
+            {isgetData &&<Route path='/costing_schedular_app/' exact element={<Schedular adminData={adminData} />}/> }
             </Routes>
         </Router>
     );
