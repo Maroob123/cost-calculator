@@ -244,10 +244,10 @@ export default function HomePage({ adminData }) {
 
     return (
       <>
-         <nav class="navbar sticky-top navbar-light bg-light">
-            <div class="container">
+         <nav className="navbar sticky-top navbar-light bg-light">
+            <div className="container">
 
-               <h1 class="navbar-brand ms-2 mb-0 p-0">Cost Calculations {data?.tabs[currentTabIndex]?.isQuatationStatus !== undefined && (<span class={ `badge ${data?.tabs[currentTabIndex]?.isQuatationStatus === true ? "bg-success" : "bg-warning  text-dark"}`}>{data?.tabs[currentTabIndex]?.isQuatationStatus ? "Approved" : "Not Signed"}</span>)}</h1>
+               <h1 className="navbar-brand ms-2 mb-0 p-0">Cost Calculations {data?.tabs[currentTabIndex]?.isQuatationStatus !== undefined && (<span className={ `badge ${data?.tabs[currentTabIndex]?.isQuatationStatus === true ? "bg-success" : "bg-warning  text-dark"}`}>{data?.tabs[currentTabIndex]?.isQuatationStatus ? "Approved" : "Not Signed"}</span>)}</h1>
                <div>
                   {data?.tabs[currentTabIndex]?.isQuatationStatus === false && (
                      <button className="btn btn-outline-custom px-4 me-2" type="button" onClick={manuallyApprove} disabled={loader}>

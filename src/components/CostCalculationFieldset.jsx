@@ -44,9 +44,9 @@ function handlechangeMarkup(e){
   let overallcost = {...props.data.costCalculation}
   overallcost.markep = e.target.valueAsNumber;
   let totatcostcalculation = props.data.ZonePrice.TotalCost + overallcost.other + overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
-  let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
+  // let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
   overallcost.TotalCost = totatcostcalculation;
-  overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
+  overallcost.Quatation = ((totatcostcalculation / 100) * overallcost.markep) + totatcostcalculation;
 
   props.setData((prevData)=>{
     const updatedTabs = [...prevData.tabs];

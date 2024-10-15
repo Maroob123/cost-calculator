@@ -179,9 +179,9 @@ const [newField, setNewField] = useState({
     overallcost.materialTotalCost =  overallcost.materialTotalCost - newData[indexToRemove].totalMaterialCost
     overallcost.totalFualCost = overallcost.totalFualCost - calculatefuelCostSum(newData[indexToRemove]) 
     let totatcostcalculation = props.data.ZonePrice.TotalCost + overallcost.other + overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
-    let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
+    // let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
     overallcost.TotalCost = totatcostcalculation;
-    overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation; 
+    overallcost.Quatation = ((totatcostcalculation / 100) * overallcost.markep) + totatcostcalculation; 
 
     props.setCurrentDataIndex(indexToRemove - 1)
     props.setData((prevData) => {
