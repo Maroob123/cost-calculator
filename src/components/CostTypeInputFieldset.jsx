@@ -61,9 +61,9 @@ export default function CostTypeInputFieldset(props) {
     overallcost.other = calculateTotalCost(newData);
     
     let totatcostcalculation = props.data.ZonePrice.TotalCost + overallcost.other + overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
-    // let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
+    let totatcostcalculationwithmarup =  props.data.ZonePrice.TotalCost + overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
     overallcost.TotalCost = totatcostcalculation;
-    overallcost.Quatation = ((totatcostcalculation / 100) * overallcost.markep) + totatcostcalculation;
+    overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
     props.setData((prevData)=>{
       const updatedTabs = [...prevData.tabs];
       const updatedDays = [...updatedTabs[props.currentTabIndex].days];
@@ -140,9 +140,9 @@ export default function CostTypeInputFieldset(props) {
     overallcost.other = calculateTotalCost(newData);
     
     let totatcostcalculation = props.data.ZonePrice.TotalCost + overallcost.other + overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
-    // let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
+    let totatcostcalculationwithmarup = props.data.ZonePrice.TotalCost + overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
     overallcost.TotalCost = totatcostcalculation;
-    overallcost.Quatation = ((totatcostcalculation / 100) * overallcost.markep) + totatcostcalculation;
+    overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
     props.setData((prevData)=>{
       const updatedTabs = [...prevData.tabs];
 
@@ -174,9 +174,9 @@ export default function CostTypeInputFieldset(props) {
      overallcost.other = calculateTotalCost(newData);
      
      let totatcostcalculation = props.data.ZonePrice.TotalCost + overallcost.other + overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
-    //  let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
+     let totatcostcalculationwithmarup = props.data.ZonePrice.TotalCost + overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
      overallcost.TotalCost = totatcostcalculation;
-     overallcost.Quatation = ((totatcostcalculation / 100) * overallcost.markep) + totatcostcalculation;
+     overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
      props.setData((prevData)=>{
       const updatedTabs = [...prevData.tabs];
 
@@ -208,9 +208,9 @@ export default function CostTypeInputFieldset(props) {
       overallcost.other = calculateTotalCost(updatedDays);
       
       let totatcostcalculation = props.data.ZonePrice.TotalCost + overallcost.other + overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
-      // let totatcostcalculationwithmarup = overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
+      let totatcostcalculationwithmarup = props.data.ZonePrice.TotalCost + overallcost.VehicleTotalCost + overallcost.HumanTotalCost + overallcost.materialTotalCost + overallcost.totalFualCost;
       overallcost.TotalCost = totatcostcalculation;
-      overallcost.Quatation = ((totatcostcalculation / 100) * overallcost.markep) + totatcostcalculation;
+      overallcost.Quatation = ((totatcostcalculationwithmarup / 100) * overallcost.markep) + totatcostcalculation;
 
       updatedTabs[props.currentTabIndex] = {
         ...updatedTabs[props.currentTabIndex],

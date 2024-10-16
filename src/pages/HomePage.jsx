@@ -23,7 +23,7 @@ export default function HomePage({ adminData }) {
                     "driver_name":"",
                     "driver_value": "0",
                     "miles":0,
-                    "days":0,
+                    "days":1,
                     "fuelcost":0,
                     "cost":0
                  }
@@ -98,7 +98,7 @@ export default function HomePage({ adminData }) {
                   "driver_name":"",
                   "driver_value": "0",
                   "miles":0,
-                  "days":0,
+                  "days":1,
                   "fuelcost":0,
                   "cost":0
                }
